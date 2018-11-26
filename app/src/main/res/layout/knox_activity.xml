@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fff"
+                android:padding="50dp">
+
+    <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:text="USTAWIENIA KNOX"
+            android:textColor="#000"
+            android:textSize="80dp"/>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:orientation="vertical">
+
+        <Button
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:id="@+id/enableSealedModeButton"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:background="@drawable/button_bg_01"
+                android:enabled="false"
+                android:text="Aktywuj SEALED MODE"
+                android:textColor="#fff"
+                android:textSize="22dp"/>
+
+        <Button
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:id="@+id/enableLicenceButton"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_bg_01"
+                android:enabled="false"
+                android:text="Aktywuj licencję KNOX"
+                android:textColor="#fff"
+                android:textSize="22dp"
+                android:visibility="visible"/>
+
+        <Button
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:id="@+id/enableDeviceAdminButton"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_bg_01"
+                android:text="Aktywuj administratora urządzenia"
+                android:textColor="#fff"
+                android:textSize="22dp"
+                android:visibility="visible"/>
+    </LinearLayout>
+
+    <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"/>
+</RelativeLayout>

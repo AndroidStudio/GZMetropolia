@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.gallery_item_fragment.*
 import kotlinx.android.synthetic.main.gallery_layout.*
@@ -44,13 +45,19 @@ class GalleryActivity : BaseActivity() {
     }
 
     private fun prepareGalleyList() {
-        val folder = Environment.getExternalStorageDirectory().toString() + "/mz_metropolia/galeria/"
-        val directory = File(folder)
-        val files = directory.listFiles()
-        for (file in files) {
-            val path = folder + "/" + file.name
-            galleryList.add(path)
-            Timber.d("item path: %s", path)
+        try {
+            val folder = Environment.getExternalStorageDirectory().toString() + "/mz_metropolia/galeria/"
+            val directory = File(folder)
+            val files = directory.listFiles()
+            for (file in files) {
+                val path = folder + "/" + file.name
+                galleryList.add(path)
+                Timber.d("item path: %s", path)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Brak plikow", Toast.LENGTH_LONG).show()
+            finish()
         }
     }
 }

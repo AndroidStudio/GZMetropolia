@@ -11,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Toast
 import kotlinx.android.synthetic.main.audio_layout.*
 import kotlinx.android.synthetic.main.audio_list.view.*
+import java.io.IOException
 
 class AudioActivity : BaseActivity(), SelectAudioCallback {
 
@@ -95,6 +97,9 @@ class AudioActivity : BaseActivity(), SelectAudioCallback {
             mediaPlayer.isLooping = true
             mediaPlayer.prepare()
             mediaPlayer.setOnPreparedListener { startAudio() }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "plik nie zostal odnaleziony", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             e.printStackTrace()
         }

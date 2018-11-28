@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,74 +14,67 @@ import android.widget.BaseAdapter
 import kotlinx.android.synthetic.main.audio_layout.*
 import kotlinx.android.synthetic.main.audio_list.view.*
 
-
 class AudioActivity : BaseActivity(), SelectAudioCallback {
 
-    private val audioList by lazy {
-        listOf(
-            AudioModel(
-                "Get Best Advertiser In Your Side Pocket",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            ),
-            AudioModel(
-                "Metropolia przemysłowych miast Górnego Śląska i Zagłębia Dąbrowskiego",
-                "android.resource://" + packageName + "/" + R.raw.audio, "03:21"
-            )
-        )
-    }
+    private lateinit var audioList: List<AudioModel>
 
     private val mediaPlayer: MediaPlayer = MediaPlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.audio_layout)
+        createAudioList()
+
         audioListView.adapter = AudioListAdapter(this, audioList, this)
         stop.setOnClickListener { stopAudio() }
         play.setOnClickListener { startAudio() }
+    }
+
+    private fun createAudioList() {
+        val singleAudio = intent!!.extras!!.getBoolean(SINGLE_AUDIO, false)
+        audioList = if (singleAudio) {
+            listOf(
+                AudioModel(
+                    "Katowickie odgłosy natury",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/katowice_odglosy_natury.wav", ""
+                )
+            )
+        } else {
+            listOf(
+                AudioModel(
+                    "Concerto For Harpsichord and String Quartet",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/concerto_for_harpsichord_and_string.mp3",
+                    ""
+                ),
+                AudioModel(
+                    "Jestem bogiem",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/jestem_bogiem.mp3", ""
+                ),
+                AudioModel(
+                    "Nie mam skrzydel",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/nie_mamy_skrzydel.mp3", ""
+                ),
+                AudioModel(
+                    "Orawa",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/orawa.mp3", ""
+                ),
+                AudioModel(
+                    "Tango Schaeffera",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/tango_schaeffera.mp3", ""
+                ),
+                AudioModel(
+                    "Wehikul Czasu - To Bylby Cud",
+                    Environment.getExternalStorageDirectory().absolutePath
+                            + "/mz_metropolia/audio/wehikul_czasu_to_bylby_cud.mp3", ""
+                )
+            )
+        }
     }
 
     override fun onDestroy() {
@@ -96,10 +90,14 @@ class AudioActivity : BaseActivity(), SelectAudioCallback {
     private fun playNewAudio(path: String) {
         releasePlayer()
 
-        mediaPlayer.setDataSource(applicationContext, Uri.parse(path))
-        mediaPlayer.isLooping = true
-        mediaPlayer.prepare()
-        mediaPlayer.setOnPreparedListener { startAudio() }
+        try {
+            mediaPlayer.setDataSource(applicationContext, Uri.parse(path))
+            mediaPlayer.isLooping = true
+            mediaPlayer.prepare()
+            mediaPlayer.setOnPreparedListener { startAudio() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun releasePlayer() {

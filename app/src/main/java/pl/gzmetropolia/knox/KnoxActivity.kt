@@ -246,7 +246,7 @@ class KnoxActivity : AppCompatActivity() {
 
             val restrictionPolicy = deviceManager.restrictionPolicy
             restrictionPolicy.allowFactoryReset(false)
-            restrictionPolicy.allowPowerOff(false)
+            restrictionPolicy.allowPowerOff(true)
             restrictionPolicy.allowSafeMode(false)
             restrictionPolicy.setHomeKeyState(false)
             restrictionPolicy.setWiFiState(true)

@@ -1,7 +1,7 @@
 package pl.gzmetropolia
 
-import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -11,14 +11,17 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.gallery_item_fragment.*
 import kotlinx.android.synthetic.main.gallery_layout.*
+import timber.log.Timber
+import java.io.File
+
 
 class GalleryActivity : BaseActivity() {
-
-    private val typeface by lazy { Typeface.createFromAsset(assets, "ArcaMajora3-Bold.otf") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.gallery_layout)
+        prepareGalleyList()
+
         viewPager.adapter = GalleryAdapter(supportFragmentManager)
 
         next.setOnClickListener {
@@ -39,16 +42,27 @@ class GalleryActivity : BaseActivity() {
             }
         }
     }
+
+    private fun prepareGalleyList() {
+        val folder = Environment.getExternalStorageDirectory().toString() + "/mz_metropolia/galeria/"
+        val directory = File(folder)
+        val files = directory.listFiles()
+        for (file in files) {
+            val path = folder + "/" + file.name
+            galleryList.add(path)
+            Timber.d("item path: %s", path)
+        }
+    }
 }
 
-private val galleryList = listOf(R.drawable.p_1, R.drawable.p_2, R.drawable.p_3)
+private val galleryList: ArrayList<String> = ArrayList()
 
 const val GALLERY_ITEM = "gallery_item"
 
 class GalleryAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-        return GalleryFragment().apply { arguments = Bundle().apply { putInt(GALLERY_ITEM, galleryList[position]) } }
+        return GalleryFragment().apply { arguments = Bundle().apply { putString(GALLERY_ITEM, galleryList[position]) } }
     }
 
     override fun getCount(): Int {
@@ -64,7 +78,8 @@ class GalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getInt(GALLERY_ITEM)
-            .let { url -> activity?.let { activity -> Glide.with(activity).load(url).into(imageView) } }
+
+        arguments?.getString(GALLERY_ITEM)
+            .let { url -> activity?.let { activity -> Glide.with(activity).load(File(url)).into(imageView) } }
     }
 }

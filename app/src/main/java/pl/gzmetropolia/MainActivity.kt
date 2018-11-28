@@ -1,14 +1,20 @@
 package pl.gzmetropolia
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.gzmetropolia.knox.KnoxActivity
+
+const val SINGLE_AUDIO = "single_audio"
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         knoxButton.setOnClickListener { showKnoxDialog(); }
         videoButton.setOnClickListener { launchActivity<VideoActivity> {} }
         galleryButton.setOnClickListener { launchActivity<GalleryActivity> {} }
-        audioButton.setOnClickListener { launchActivity<AudioActivity> {} }
+        audioButton.setOnClickListener { launchActivity<AudioActivity> { putExtra(SINGLE_AUDIO, false) } }
+        natureAudio.setOnClickListener { launchActivity<AudioActivity> { putExtra(SINGLE_AUDIO, true) } }
 
         typeface = Typeface.createFromAsset(assets, "ArcaMajora3-Bold.otf")
         titleTextView.typeface = typeface
@@ -29,6 +36,25 @@ class MainActivity : AppCompatActivity() {
         galleryButton.typeface = typeface
         audioButton.typeface = typeface
         logoTitle.typeface = typeface
+        natureAudio.typeface = typeface
+
+        if (!checkPermissions()) {
+            requestPermissions()
+        }
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 101
+        )
+    }
+
+    private fun checkPermissions(): Boolean {
+        val readStorage = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        return readStorage == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onBackPressed() {

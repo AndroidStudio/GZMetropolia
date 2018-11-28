@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
+                android:keepScreenOn="true"
                 android:layout_height="match_parent">
 
     <Button
@@ -31,6 +32,21 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/natureAudio"
+                android:layout_width="270dp"
+                android:layout_height="270dp"
+                android:layout_margin="10dp"
+                android:background="@color/color_01"
+                android:drawableTop="@drawable/ic_music_note"
+                android:paddingLeft="20dp"
+                android:paddingTop="70dp"
+                android:paddingRight="20dp"
+                android:text="Katowickie\nodgłosy natury"
+                android:textColor="#fff"
+                android:textSize="14dp"
+                tools:ignore="ButtonStyle,HardcodedText"/>
 
         <Button
                 android:id="@+id/audioButton"

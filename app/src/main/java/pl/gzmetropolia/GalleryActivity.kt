@@ -2,9 +2,11 @@ package pl.gzmetropolia
 
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +17,9 @@ import kotlinx.android.synthetic.main.gallery_layout.*
 import timber.log.Timber
 import java.io.File
 
-
 class GalleryActivity : BaseActivity() {
+
+    val handler: Handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +27,18 @@ class GalleryActivity : BaseActivity() {
         prepareGalleyList()
 
         viewPager.adapter = GalleryAdapter(supportFragmentManager)
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {
+
+            }
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                imageTitle(position)
+            }
+        })
 
         next.setOnClickListener {
             val currentItem = viewPager.currentItem
@@ -42,6 +57,24 @@ class GalleryActivity : BaseActivity() {
                 viewPager.currentItem = viewPager.currentItem - 1
             }
         }
+
+        imageTitle(0)
+    }
+
+    private fun imageTitle(position: Int) {
+        try {
+            handler.removeCallbacksAndMessages(null)
+            handler.postDelayed({ nameTextView.animate().alpha(0f)}, 6000)
+            nameTextView.text = galleryFileNameList[position]
+            nameTextView.animate().alpha(1f)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun prepareGalleyList() {
@@ -50,7 +83,14 @@ class GalleryActivity : BaseActivity() {
             val directory = File(folder)
             val files = directory.listFiles()
             for (file in files) {
+                val fileName = file.name
+                    .replace(".jpg", "")
+                    .replace(".JPG", "")
+                    .replace("jpg", "")
+                    .replace("_", "")
+
                 val path = folder + "/" + file.name
+                galleryFileNameList.add(fileName)
                 galleryList.add(path)
                 Timber.d("item path: %s", path)
             }
@@ -63,13 +103,18 @@ class GalleryActivity : BaseActivity() {
 }
 
 private val galleryList: ArrayList<String> = ArrayList()
+private val galleryFileNameList: ArrayList<String> = ArrayList()
 
 const val GALLERY_ITEM = "gallery_item"
 
 class GalleryAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-        return GalleryFragment().apply { arguments = Bundle().apply { putString(GALLERY_ITEM, galleryList[position]) } }
+        return GalleryFragment().apply {
+            arguments = Bundle().apply {
+                putString(GALLERY_ITEM, galleryList[position])
+            }
+        }
     }
 
     override fun getCount(): Int {
@@ -85,8 +130,11 @@ class GalleryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        arguments?.getString(GALLERY_ITEM)
-            .let { url -> activity?.let { activity -> Glide.with(activity).load(File(url)).into(imageView) } }
+        try {
+            arguments?.getString(GALLERY_ITEM)
+                .let { url -> activity?.let { activity -> Glide.with(activity).load(File(url)).into(imageView) } }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

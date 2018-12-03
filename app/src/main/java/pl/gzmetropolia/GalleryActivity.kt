@@ -32,7 +32,7 @@ class GalleryActivity : BaseActivity() {
 
             }
 
-            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            override fun onPageScrolled(position: Int, p1: Float, p2: Int) {
             }
 
             override fun onPageSelected(position: Int) {
@@ -64,7 +64,7 @@ class GalleryActivity : BaseActivity() {
     private fun imageTitle(position: Int) {
         try {
             handler.removeCallbacksAndMessages(null)
-            handler.postDelayed({ nameTextView.animate().alpha(0f)}, 6000)
+            handler.postDelayed({ nameTextView.animate().alpha(0f) }, 6000)
             nameTextView.text = galleryFileNameList[position]
             nameTextView.animate().alpha(1f)
         } catch (e: Exception) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="pl.gzmetropolia">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="pl.gzmetropolia">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -12,40 +13,48 @@
     <uses-permission android:name="android.permission.sec.MDM_SECURITY"/>
     <uses-permission android:name="android.permission.sec.MDM_HW_CONTROL"/>
 
-    <application android:allowBackup="false"
-                 android:icon="@mipmap/ic_launcher"
-                 android:label="@string/app_name"
-                 android:supportsRtl="true"
-                 android:name=".GZMetropoliaApplication"
-                 android:theme="@style/AppTheme"
-                 tools:ignore="GoogleAppIndexingWarning">
+    <application
+        android:name=".GZMetropoliaApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="sensorLandscape">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".knox.KnoxActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="sensorLandscape"/>
-        <activity android:name=".VideoActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="sensorLandscape"/>
-        <activity android:name=".AudioActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="sensorLandscape"/>
-        <activity android:name=".GalleryActivity"
-                  android:configChanges="orientation"
-                  android:screenOrientation="sensorLandscape"/>
+        <activity
+            android:name=".knox.KnoxActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape"/>
+        <activity
+            android:name=".VideoActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape"/>
+        <activity
+            android:name=".AudioActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape"/>
+        <activity
+            android:name=".GalleryActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape"/>
+
         <receiver
-                android:name="pl.gzmetropolia.knox.AdminReceiver"
-                android:label="@string/app_name"
-                android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data android:name="android.app.device_admin"
-                       android:resource="@xml/device_admin"/>
+            android:name="pl.gzmetropolia.knox.AdminReceiver"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin"/>
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
             </intent-filter>

@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,46 +36,46 @@ class AudioActivity : BaseActivity(), SelectAudioCallback {
     private fun createAudioList() {
         val singleAudio = intent!!.extras!!.getBoolean(SINGLE_AUDIO, false)
         audioList = if (singleAudio) {
-            listOf(
-                AudioModel(
-                    "Katowickie odgłosy natury",
+            listOf(AudioModel("Katowickie odgłosy natury",
                     Environment.getExternalStorageDirectory().absolutePath
-                            + "/mz_metropolia/audio/katowice_odglosy_natury.wav", ""
-                )
+                            + "/mz_metropolia/audio/katowice_odglosy_natury.wav",
+                    "03:51",
+                    "")
             )
         } else {
-            listOf(
-                AudioModel(
-                    "Concerto For Harpsichord and String Quartet",
+            listOf(AudioModel("Concerto For Harpsichord and String Quartet",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/concerto_for_harpsichord_and_string.mp3",
-                    ""
-                ),
-                AudioModel(
-                    "Jestem bogiem",
+                    "04:36",
+                    "Henryk Gorecki")
+                    , AudioModel("Jestem bogiem",
                     Environment.getExternalStorageDirectory().absolutePath
-                            + "/mz_metropolia/audio/jestem_bogiem.mp3", ""
-                ),
-                AudioModel(
+                            + "/mz_metropolia/audio/jestem_bogiem.mp3",
+                    "03:22",
+                    "Paktofonika")
+                    , AudioModel(
                     "Nie mam skrzydel",
                     Environment.getExternalStorageDirectory().absolutePath
-                            + "/mz_metropolia/audio/nie_mamy_skrzydel.mp3", ""
-                ),
-                AudioModel(
-                    "Orawa",
+                            + "/mz_metropolia/audio/nie_mamy_skrzydel.mp3",
+                    "03:48",
+                    "Miuosh")
+                    , AudioModel("Orawa",
                     Environment.getExternalStorageDirectory().absolutePath
-                            + "/mz_metropolia/audio/orawa.mp3", ""
-                ),
-                AudioModel(
+                            + "/mz_metropolia/audio/orawa.mp3",
+                    "08:25",
+                    "Orchestra Sinfonia Varsovia")
+                    , AudioModel(
                     "Tango Schaeffera",
                     Environment.getExternalStorageDirectory().absolutePath
-                            + "/mz_metropolia/audio/tango_schaeffera.mp3", ""
-                ),
-                AudioModel(
+                            + "/mz_metropolia/audio/tango_schaeffera.mp3",
+                    "03:59",
+                    "Marcin Wyrostek")
+                    , AudioModel(
                     "Wehikul Czasu - To Bylby Cud",
                     Environment.getExternalStorageDirectory().absolutePath
-                            + "/mz_metropolia/audio/wehikul_czasu_to_bylby_cud.mp3", ""
-                )
+                            + "/mz_metropolia/audio/wehikul_czasu_to_bylby_cud.mp3",
+                    "06:12",
+                    "Dżem")
             )
         }
     }
@@ -85,7 +86,7 @@ class AudioActivity : BaseActivity(), SelectAudioCallback {
     }
 
     override fun onSelectAudio(audioModel: AudioModel) {
-        audioTitleTextView.text = audioModel.title
+        audioTitleTextView.text = String.format("%s", audioModel.artist + "\n" + audioModel.title)
         playNewAudio(audioModel.path)
     }
 
@@ -129,9 +130,9 @@ interface SelectAudioCallback {
 }
 
 class AudioListAdapter(
-    context: Context,
-    private val list: List<AudioModel>,
-    private val callbacks: SelectAudioCallback
+        context: Context,
+        private val list: List<AudioModel>,
+        private val callbacks: SelectAudioCallback
 ) : BaseAdapter() {
 
     private var selected: Int = -1
@@ -149,14 +150,20 @@ class AudioListAdapter(
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = inflater.inflate(R.layout.audio_list, parent, false)
-        view.timeTextView.text = list[position].time
+        view.artistTextView.text = list[position].artist
         view.titleTextView.text = list[position].title
+        view.timeTextView.text = list[position].time
+
+        if (TextUtils.isEmpty(list[position].artist)) {
+            view.artistTextView.visibility = View.GONE
+        } else {
+            view.artistTextView.visibility = View.VISIBLE
+        }
 
         if (selected == position) {
             view.image.setBackgroundColor(Color.parseColor("#FFD7006D"))
             view.image.setImageResource(R.drawable.ic_002_music_note)
             view.arrowIcon.setImageResource(R.drawable.arrow_selected)
-
         } else {
             view.image.setBackgroundColor(Color.parseColor("#FFF7F7F7"))
             view.image.setImageResource(R.drawable.ic_002_music_note_normal)

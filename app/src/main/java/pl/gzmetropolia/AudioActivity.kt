@@ -36,46 +36,59 @@ class AudioActivity : BaseActivity(), SelectAudioCallback {
     private fun createAudioList() {
         val singleAudio = intent!!.extras!!.getBoolean(SINGLE_AUDIO, false)
         audioList = if (singleAudio) {
-            listOf(AudioModel("Katowickie odgłosy natury",
+            listOf(
+                AudioModel(
+                    "Katowickie odgłosy natury",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/katowice_odglosy_natury.wav",
                     "03:51",
-                    "")
+                    ""
+                )
             )
         } else {
-            listOf(AudioModel("Concerto For Harpsichord and String Quartet",
+            listOf(
+                AudioModel(
+                    "Concerto for Harpsichord and String Quartet",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/concerto_for_harpsichord_and_string.mp3",
                     "04:36",
-                    "Henryk Gorecki")
-                    , AudioModel("Jestem bogiem",
+                    "Henryk Górecki"
+                )
+                , AudioModel(
+                    "Jestem Bogiem",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/jestem_bogiem.mp3",
                     "03:22",
-                    "Paktofonika")
-                    , AudioModel(
-                    "Nie mam skrzydel",
+                    "Paktofonika"
+                )
+                , AudioModel(
+                    "Nie mamy skrzydeł",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/nie_mamy_skrzydel.mp3",
                     "03:48",
-                    "Miuosh")
-                    , AudioModel("Orawa",
+                    "Miuosh"
+                )
+                , AudioModel(
+                    "Orawa",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/orawa.mp3",
                     "08:25",
-                    "Orchestra Sinfonia Varsovia")
-                    , AudioModel(
+                    "Wojciech Kilar"
+                )
+                , AudioModel(
                     "Tango Schaeffera",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/tango_schaeffera.mp3",
                     "03:59",
-                    "Marcin Wyrostek")
-                    , AudioModel(
-                    "Wehikul Czasu - To Bylby Cud",
+                    "Marcin Wyrostek"
+                )
+                , AudioModel(
+                    "Wehikuł czasu",
                     Environment.getExternalStorageDirectory().absolutePath
                             + "/mz_metropolia/audio/wehikul_czasu_to_bylby_cud.mp3",
                     "06:12",
-                    "Dżem")
+                    "Dżem"
+                )
             )
         }
     }
@@ -130,9 +143,9 @@ interface SelectAudioCallback {
 }
 
 class AudioListAdapter(
-        context: Context,
-        private val list: List<AudioModel>,
-        private val callbacks: SelectAudioCallback
+    context: Context,
+    private val list: List<AudioModel>,
+    private val callbacks: SelectAudioCallback
 ) : BaseAdapter() {
 
     private var selected: Int = -1
